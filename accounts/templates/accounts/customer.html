@@ -2,77 +2,84 @@
 
 {% block content %}
 
-<div class="row">
-    <div class="col-md-3">
-        <div class="card card-body">
-            <h5>Customer</h5>
-            <hr>
-        </div>
-        <div class="card card-body">
-            <button type="button" class="btn btn-primary">
-                Update Customer
-            </button>
-        </div>
-
-        <div class="card card-body">
-            <button type="button" class="btn btn-warning">
-                Update Customer
-            </button>
-        </div>
-    </div>
+<div class="container">
+    <section class="content">
         <div class="row">
-            <div class="col-md">        
+            <div class="col-md-3">
                 <div class="card card-body">
-                    <h5>Contact Information</h5>
+                    <h5>Customer</h5>
                     <hr>
-                    <label for="email">Email:
-                    <input type="text" class="form-control" readonly></label>
-                    <label for="phone">Phone: 
-                    <input type="text" class="form-control" readonly>
-                    </label>
+                
+                <div class="card card-body">
+                    <button type="button" class="btn btn-primary">
+                        Update Customer
+                    </button>
+                <br>
+                    <button type="button" class="btn btn-danger">
+                        Delete Customer
+                    </button>
                 </div>
             </div>
+            </div>
+                <div class="row">
+                    <div class="col-md">        
+                        <div class="card card-body">
+                            <h5>Contact Information</h5>
+                            <hr>
+                            <p class="card-text">Email: {{ customer.email }}</p>
+                            <p class="card-text">Phone: {{ customer.phone }}</p>
+                        </div>
+                    </div>
+                        <div class="row">
+                            <div class="col-md">        
+                                <div class="card card-body">
+                                    <h5>Total Orders</h5>
+                                    <hr>
+                                    <p class="card-text">
         
-
-
+                                    </p>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>                   
+    
+        <br>
 
         <div class="row">
-            <div class="col-md">        
+            <div class="col-md">
                 <div class="card card-body">
-                    <h5>Total Orders</h5>
-                    <hr>
-                    <p class="card-text">
-
-                    </p>
-                    
+                    <label class="col-md" for="search">
+                        <input type="text" id="search" placeholder="Search" class="form-control" >
+                    </label>        
                 </div>
             </div>
         </div>
-    </div>
-</div>   
+        <br>
 
-
-
-<br>
-<div class="row">
-    <div class="col-md">
-        <div class="card card-body">
-            <h5>Products</h5>
+        <div class="row"> 
+            <div class="col-md">
+                <div class="card card-body">
+                    <h5>Products</h5>                
+                
+                <div class="card card-body">
+                    <table class="table table-striped">
+                        <tr>
+                            <th>Product Name</th>
+                            <th>Category</th>
+                            <th>Date Ordered</th>
+                            <th>Status</th>
+                            <th>Update</th>
+                            <th>Remove</th>
+                        </tr>
+                    </table>
+                </div>
+            </div>              
         </div>
-        <div class="card card-body">
-            <table class="table table-striped">
-                <tr>
-                    <th>Product Name</th>
-                    <th>Category</th>
-                    <th>Date Ordered</th>
-                    <th>Status</th>
-                    <th>Update</th>
-                    <th>Remove</th>
-                </tr>
-            </table>
-        </div>
-    </div>
+</section>
 </div>
+
 
 
 {% endblock %}
