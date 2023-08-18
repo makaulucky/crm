@@ -27,9 +27,9 @@ def products(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})
 
-def customer(request, pk):  # Renamed the function to 'customer'
-    customer = Customer.objects.get(id=pk)  # Renamed 'customers' to 'customer'
-    orders = customer.order_set.all()  # Renamed 'customers' to 'customer'
+def customer(request, pk): 
+    customer = Customer.objects.get(id=pk)
+    orders = customer.order_set.all()
 
     context = {
         'customer': customer,
@@ -49,11 +49,36 @@ def create_customer(request):
     }
     return render(request, 'accounts/customer_form.html', context)
 
+def update_customer(request, pk):
+    customer = Customer.objects.get(id=pk)
+    form = CustomerForm(instance=customer)
+
+    if request.method == 'POST':
+        form = CustomerForm(request.POST, instance=customer)
+        if form.is_valid():
+            form.save()
+            return redirect('/')
+
+    context = {
+        'form': form
+    }
+    return render(request, 'accounts/customer_form.html', context)
+
+def delete_customer(request, pk):
+    customer = Customer.objects.get(id=pk)
+    if request.method == 'POST':
+        customer.delete()
+        return redirect('/')
+    context = {
+        'item': customer
+    }
+    return render(request, 'accounts/delete.html', context)
+
 
 def accounts(request):
     return render(request, 'accounts/accounts.html')
 
-def create_order(request):  # Renamed the function to 'create_order'
+def create_order(request):
     form = OrderForm()
     if request.method == 'POST':
         form = OrderForm(request.POST)
@@ -66,7 +91,7 @@ def create_order(request):  # Renamed the function to 'create_order'
     }
     return render(request, 'accounts/order_form.html', context)
 
-def update_order(request, pk):  # Renamed the function to 'update_order'
+def update_order(request, pk): 
     order = Order.objects.get(id=pk)
     form = OrderForm(instance=order)
     
