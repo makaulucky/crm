@@ -11,13 +11,11 @@
                     <hr>
                 
                 <div class="card card-body">
-                    <button type="button" class="btn btn-primary">
-                        Update Customer
-                    </button>
+                    <a href="{% url 'update_customer' customer.id %}" class="btn btn-info">Update Customer</a>
+
                 <br>
-                    <button type="button" class="btn btn-danger">
-                        Delete Customer
-                    </button>
+                <a href="{% url 'delete_customer' customer.id %}" class="btn btn-danger">Delete</a>
+
                 </div>
             </div>
             </div>
