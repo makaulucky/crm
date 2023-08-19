@@ -14,7 +14,7 @@
                     <a href="{% url 'update_customer' customer.id %}" class="btn btn-info">Update Customer</a>
 
                 <br>
-                <a href="{% url 'delete_customer' customer.id %}" class="btn btn-danger">Delete</a>
+                <a href="{% url 'create_order' customer.id %}" class="btn btn-outline-info">Place Order</a>
 
                 </div>
             </div>
@@ -46,9 +46,10 @@
         <div class="row">
             <div class="col-md">
                 <div class="card card-body">
-                    <label class="form-label" for="search">
-                        <input type="text" id="search" placeholder="Search" class="form-control" >
-                    </label>        
+                    <form action="" method="get">
+                        {{ myFilter.form}}
+                        <button class="btn btn-outline-info">Search</button>
+                    </form>       
                 </div>
             </div>
         </div>
@@ -65,6 +66,7 @@
                         <tr>
                             <th>Product Name</th>
                             <th>Category</th>
+                            <th>Description</th>
                             <th>Date Ordered</th>
                             <th>Status</th>
                             <th>Update</th>
@@ -74,6 +76,7 @@
                         <tr>
                             <td>{{ order.product.name }}</td>
                             <td>{{ order.product.category }}</td>
+                            <td>{{ order.description }}</td>
                             <td>{{ order.date_created }}</td>
                             <td>{{ order.status }}</td>
                             <td><a class="btn btn-info" href="{% url 'update_order' order.id %}">Update</a></td>
