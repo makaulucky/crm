@@ -1,22 +1,63 @@
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
+from django.contrib.auth.forms import UserCreationForm
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
+
 from .models import *
 from .forms import *
 from .filters import *
+from .decorators import unauthenticated_user
 
 
-def login(request):
-    return render (request, 'accounts/login.html')
+@unauthenticated_user
+def register(request):   
+    form = CreateUserForm()
+    if request.method == 'POST':
+        form = CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save()
+            user = form.cleaned_data.get('username')
+            messages.success(request, 'Account was created for ' + user)
+            
+            return redirect('login')
+        
+    context = {
+        'form': form
+    }
+    return render (request, 'accounts/register.html', context)
 
-def register(request):
-    return render (request, 'accounts/register.html')
+@unauthenticated_user
+def loginPage(request):
+
+    username = ''
+    password = ''
+
+    if request.method == 'POST':
+        username = request.POST.get('username')
+        password = request.POST.get('password')
+
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            return redirect('home')
+        else:
+            messages.info(request, 'Username OR Password is incorrect')
+
+    context = {
+            'username': username,
+            'password': password
+        }
+
+    return render (request, 'accounts/login.html', context)
+
+def logoutUser(request):
+    logout(request)
+    return redirect('login')
 
 
-
-
-
-
-
+@login_required(login_url='login')
 def home(request):
     orders = Order.objects.all()
     customers = Customer.objects.all()
@@ -38,6 +79,7 @@ def home(request):
     }
     return render(request, 'accounts/dashboard.html', context)
 
+@login_required(login_url='login')
 def products(request):
     products = Product.objects.all()
     return render(request, 'accounts/products.html', {'products': products})
@@ -54,6 +96,7 @@ def create_product(request):
     }
     return render(request, 'accounts/product_form.html', context)
 
+@login_required(login_url='login')
 def update_product(request, pk):
     product = Product.objects.get(id=pk)
     form = ProductForm(instance=product)
@@ -67,6 +110,7 @@ def update_product(request, pk):
     }
     return render(request, 'accounts/product_form.html', context)
 
+@login_required(login_url='login')
 def delete_product(request, pk):
     product = Product.objects.get(id=pk)
     if request.method == 'POST':
@@ -77,7 +121,7 @@ def delete_product(request, pk):
     }
     return render(request, 'accounts/delete.html', context)
 
-
+@login_required(login_url='login')
 def customer(request, pk): 
     customer = Customer.objects.get(id=pk)
     orders = customer.order_set.all()
@@ -92,7 +136,7 @@ def customer(request, pk):
         'myFilter': myFilter
     }
     return render(request, 'accounts/customer.html', context)
-
+@login_required(login_url='login')
 def create_customer(request):
     form = CustomerForm()
     if request.method == 'POST':
@@ -104,7 +148,7 @@ def create_customer(request):
         'form': form
     }
     return render(request, 'accounts/customer_form.html', context)
-
+@login_required(login_url='login')
 def update_customer(request, pk):
     customer = Customer.objects.get(id=pk)
     form = CustomerForm(instance=customer)
@@ -120,6 +164,7 @@ def update_customer(request, pk):
     }
     return render(request, 'accounts/customer_form.html', context)
 
+@login_required(login_url='login')
 def delete_customer(request, pk):
     customer = Customer.objects.get(id=pk)
     if request.method == 'POST':
@@ -129,10 +174,12 @@ def delete_customer(request, pk):
         'item': customer
     }
     return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
 def accounts(request):
     return render(request, 'accounts/accounts.html')
 
-
+@login_required(login_url='login')
 def create_order(request, pk):
     OrderFormSet = inlineformset_factory(Customer, Order, fields=('product', 'status'), extra=5)
     customer = Customer.objects.get(id=pk)
@@ -149,7 +196,7 @@ def create_order(request, pk):
         'formset': formset
     }
     return render(request, 'accounts/order_form.html', context)
-
+@login_required(login_url='login')
 def update_order(request, pk): 
     order = Order.objects.get(id=pk)
     #form = OrderForm(instance=order)
@@ -167,6 +214,7 @@ def update_order(request, pk):
     }
     return render(request, 'accounts/order_form.html', context)
 
+@login_required(login_url='login')
 def delete_order(request, pk):
     order = Order.objects.get(id=pk)
     if request.method == 'POST':
@@ -176,3 +224,7 @@ def delete_order(request, pk):
         'item': order
     }
     return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
+def userPage(request):
+    return render(request, 'accounts/user.html')
