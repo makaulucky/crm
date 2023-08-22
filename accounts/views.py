@@ -107,14 +107,6 @@ def user_page(request):
     }
     return render(request, 'accounts/user.html',context)
 
-
-
-
-
-
-
-
-
 @login_required(login_url='login')
 @allowed_users (allowed_roles=['Admin', 'Staff'])
 def products(request):
@@ -273,4 +265,3 @@ def delete_order(request, pk):
         'item': order
     }
     return render(request, 'accounts/delete.html', context)
-
