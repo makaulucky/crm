@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.forms import inlineformset_factory
-from django.contrib.auth.forms import UserCreationForm
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
@@ -10,7 +9,7 @@ from django.contrib.auth.models import Group
 from .models import *
 from .forms import *
 from .filters import *
-from .decorators import unauthenticated_user, allowed_users, admin_only
+from .decorators import *
 
 
 @unauthenticated_user
@@ -21,9 +20,12 @@ def register(request):
         if form.is_valid():
             user = form.save()
             username = form.cleaned_data.get('username')
+
             group = Group.objects.get(name = 'Customer')
 
             user.groups.add(group)
+
+            Customer.objects.create(user=user)
 
             messages.success(request, 'Account was created for ' + username)
             
@@ -89,19 +91,21 @@ def home(request):
 @login_required(login_url='login')
 @allowed_users (allowed_roles=['Customer'])
 def user_page(request):
-    orders = Order.objects.all()
+    orders = request.user.customer.order_set.all()
 
-    total_orders = orders.count()
+    total_orders = orders.count()    
     delivered = orders.filter(status='Delivered').count()
     pending = orders.filter(status='Pending').count()
-
+    out_for_delivery = orders.filter(status='Out for delivery').count() 
+    
     context = {
         'orders': orders,
         'total_orders': total_orders,
         'delivered': delivered,
         'pending': pending,
+        'out_for_delivery': out_for_delivery
     }
-    return render(request, 'accounts/user.html')
+    return render(request, 'accounts/user.html',context)
 
 
 

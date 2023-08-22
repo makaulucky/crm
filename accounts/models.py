@@ -10,8 +10,10 @@ class Customer(models.Model):
     date_updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return self.name
-    
+        return f"Customer {self.name}"
+
+
+
 class Tag(models.Model):
     name = models.CharField(max_length=200, null=True)
 
@@ -49,4 +51,5 @@ class Order(models.Model):
     date_updated = models.DateTimeField(auto_now=True, null=True)
 
     def __str__(self):
-        return self.product.name
+        return f"Order {self.id} - {self.product.name if self.product else 'No Product'}"
+    

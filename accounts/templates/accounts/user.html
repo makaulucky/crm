@@ -1,12 +1,12 @@
 {% extends 'accounts/main.html' %}
-{% load static %}
 {% block content %}
-
-    {% include 'accounts/status.html' %}
+{% include 'accounts/status.html' %}
 
     <div class="row"> 
         <div class="col-md-12">
             <div class="card card-body">
+                <h5>Products</h5>                 
+                <hr>
                 <table class="table table-striped">
                     <tr>
                         <th>Product Name</th>
@@ -17,11 +17,11 @@
                     </tr>
                     {% for order in orders %}
                     <tr>
-                        <td>{{ order.product.name }}</td>
-                        <td>{{ order.product.category }}</td>
-                        <td>{{ order.description }}</td>
-                        <td>{{ order.date_created }}</td>
-                        <td>{{ order.status }}</td>
+                        <td>{{order.product.name}}</td>
+                        <td>{{order.product.category}}</td>
+                        <td>{{order.description}}</td>
+                        <td>{{order.date_created}}</td>
+                        <td>{{order.status}}</td>
                     </tr>
                     {% endfor %}
                 </table>
