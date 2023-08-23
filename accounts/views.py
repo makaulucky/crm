@@ -265,3 +265,7 @@ def delete_order(request, pk):
         'item': order
     }
     return render(request, 'accounts/delete.html', context)
+
+@login_required(login_url='login')
+def account_settings(request):
+    return render(request, 'accounts/accounts.html')
